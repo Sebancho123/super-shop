@@ -1,0 +1,134 @@
+version: '3.8'
+
+services:
+  # Servicio de Eureka
+  eureka-shop-service:
+    build: eureka-shop-service
+    mem_limit: 512m
+    ports:
+      - "8761:8761"
+    networks:
+      - super-shop-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Servicio de productos
+  products-shop-service:
+    build: products-shop-service
+    mem_limit: 512m
+    ports:
+      - "9000:9000"
+    environment:
+      DB_URL: jdbc:postgresql://postgres-database-product:5432/shop_product_service?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USERNAME: soporte
+      DB_PASSWORD: soporte
+    networks:
+      - super-shop-network
+    depends_on:
+      eureka-shop-service:
+        condition: service_healthy
+      postgres-database-product:
+        condition: service_healthy
+
+  # Servicio de carrito
+  car-shop-service:
+    build: car-shop-service
+    mem_limit: 512m
+    ports:
+      - "9005:9005"
+   
+    environment:
+      DB_URL: jdbc:postgresql://postgres-database-car:5432/shop_car_service?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USERNAME: soporte
+      DB_PASSWORD: soporte
+    networks:
+      - super-shop-network
+    depends_on:
+      eureka-shop-service:
+        condition: service_healthy
+      postgres-database-car:
+        condition: service_healthy
+
+  # Servicio de ventas
+  sale-shop-service:
+    build: sale-shop-service
+    mem_limit: 512m
+    ports:
+      - "9010:9010"
+    environment:
+      DB_URL: jdbc:postgresql://postgres-database-sale:5432/shop_sale_service?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USERNAME: soporte
+      DB_PASSWORD: soporte
+
+    networks:
+      - super-shop-network
+    depends_on:
+      eureka-shop-service:
+        condition: service_healthy
+      postgres-database-sale:
+        condition: service_healthy
+
+  # Base de datos Postgres para ventas
+  postgres-database-sale:
+    image: postgres:17
+    container_name: postgres-database-sale
+    environment:
+      POSTGRES_USER: soporte
+      POSTGRES_PASSWORD: soporte
+      POSTGRES_DB: shop_sale_service
+    networks:
+      - super-shop-network
+    volumes:
+      - postgres_data_sale:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soporte"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Base de datos Postgres para carrito
+  postgres-database-car:
+    image: postgres:17
+    container_name: postgres-database-car
+    environment:
+      POSTGRES_USER: soporte
+      POSTGRES_PASSWORD: soporte
+      POSTGRES_DB: shop_car_service
+    networks:
+      - super-shop-network
+    volumes:
+      - postgres_data_car:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soporte"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Base de datos Postgres para productos
+  postgres-database-product:
+    image: postgres:17
+    container_name: postgres-database-product
+    environment:
+      POSTGRES_USER: soporte
+      POSTGRES_PASSWORD: soporte
+      POSTGRES_DB: shop_product_service
+    networks:
+      - super-shop-network
+    volumes:
+      - postgres_data_product:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soporte"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  super-shop-network:
+
+volumes:
+  postgres_data_sale:
+  postgres_data_car:
+  postgres_data_product:
