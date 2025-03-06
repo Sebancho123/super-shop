@@ -14,12 +14,12 @@ Este proyecto usa **PostgreSQL**, por lo que debes asegurarte de tenerlo instala
 
 ### 2️⃣ Archivo de configuración
 
-Debes crear un archivo con extensión `.env` en la raíz del proyecto. En este archivo, agrega la información de conexión a tu base de datos, como el usuario, la contraseña y el nombre de la base de datos. Ejemplo:
+Debes crear un archivo con extensión `.env` en la raíz de la carpeta donde estan todos lo servicioos. En este archivo, agrega la información de conexión a las bases de datos, como el usuario, la contraseña y los nombres de las bases de datos. Ejemplo:
 
 ```
-POSTGRES_USER=tu_usuario
-POSTGRES_PASSWORD=tu_contraseña
-POSTGRES_DB=tu_base_de_datos
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_URL_PRODUCT=tu_base_de_datos
 ```
 
 ## 🚀 Ejecución del proyecto
