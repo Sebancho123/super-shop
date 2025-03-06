@@ -12,5 +12,4 @@ public class SaleShopServiceApplication {
 		System.out.println("DB_URL : " + System.getenv("DB_URL"));
 		SpringApplication.run(SaleShopServiceApplication.class, args);
 	}
-
 }

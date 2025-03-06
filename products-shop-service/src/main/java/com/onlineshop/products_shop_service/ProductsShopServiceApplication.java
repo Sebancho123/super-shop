@@ -3,7 +3,6 @@ package com.onlineshop.products_shop_service;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -15,6 +14,7 @@ public class ProductsShopServiceApplication {
 
 
 	public static void main(String[] args) {
+		System.out.println("Url = " + System.getenv("DB_URL"));
 		SpringApplication.run(ProductsShopServiceApplication.class, args);
 	}
 

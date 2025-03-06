@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 public class CarShopServiceApplication {
 
 	public static void main(String[] args) {
+		System.out.println("Url: " + System.getenv("DB_URL"));
 		SpringApplication.run(CarShopServiceApplication.class, args);
 
 	}
